@@ -7,6 +7,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('codesage_token') || null);
   const [settings, setSettings] = useState(null);
+  
+  const API_URL = import.meta.env.VITE_API_URL || '';
 
   // Fetch logged in user profile when token changes
   useEffect(() => {
@@ -20,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
       try {
         // Fetch current user
-        const userRes = await fetch('/api/auth/me', {
+        const userRes = await fetch(`${API_URL}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const userData = await userRes.json();
@@ -29,7 +31,7 @@ export const AuthProvider = ({ children }) => {
           setUser(userData.data);
           
           // Fetch settings
-          const settingsRes = await fetch('/api/settings', {
+          const settingsRes = await fetch(`${API_URL}/api/settings`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const settingsData = await settingsRes.json();
@@ -53,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -74,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, email, password) => {
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })
@@ -104,7 +106,7 @@ export const AuthProvider = ({ children }) => {
     if (!token) return { success: false };
 
     try {
-      const res = await fetch('/api/settings', {
+      const res = await fetch(`${API_URL}/api/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

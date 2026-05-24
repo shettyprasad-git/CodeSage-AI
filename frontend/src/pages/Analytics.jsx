@@ -32,11 +32,13 @@ export default function Analytics() {
   const [data, setData] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success');
+  
+  const API_URL = import.meta.env.VITE_API_URL || '';
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await fetch('/api/analytics/summary', {
+        const res = await fetch(`${API_URL}/api/analytics/summary`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const resData = await res.json();

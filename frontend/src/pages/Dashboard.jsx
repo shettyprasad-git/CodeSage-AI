@@ -33,23 +33,25 @@ export default function Dashboard() {
   const [importing, setImporting] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success');
+  
+  const API_URL = import.meta.env.VITE_API_URL || '';
 
   const fetchDashboardData = async () => {
     try {
       // 1. Fetch Analytics Summary
-      const summaryRes = await fetch('/api/analytics/summary', {
+      const summaryRes = await fetch(`${API_URL}/api/analytics/summary`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const summaryData = await summaryRes.json();
       
       // 2. Fetch Repositories
-      const reposRes = await fetch('/api/repos', {
+      const reposRes = await fetch(`${API_URL}/api/repos`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const reposData = await reposRes.json();
 
       // 3. Fetch History
-      const historyRes = await fetch('/api/reviews?limit=5', {
+      const historyRes = await fetch(`${API_URL}/api/reviews?limit=5`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const historyData = await historyRes.json();
@@ -80,7 +82,7 @@ export default function Dashboard() {
 
     setImporting(true);
     try {
-      const res = await fetch('/api/repos/import', {
+      const res = await fetch(`${API_URL}/api/repos/import`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

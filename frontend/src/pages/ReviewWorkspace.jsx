@@ -28,6 +28,8 @@ export default function ReviewWorkspace() {
   const reviewIdParam = searchParams.get('id');
   const repoUrlParam = searchParams.get('repo');
 
+  const API_URL = import.meta.env.VITE_API_URL || '';
+
   // Input tabs state
   const [activeTab, setActiveTab] = useState('paste');
   const [editorContent, setEditorContent] = useState('// Paste your code here or upload files to begin review...\n');
@@ -66,7 +68,7 @@ export default function ReviewWorkspace() {
     const fetchRepos = async () => {
       setLoadingRepos(true);
       try {
-        const res = await fetch('/api/repos', {
+        const res = await fetch(`${API_URL}/api/repos`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -97,7 +99,7 @@ export default function ReviewWorkspace() {
     const fetchReview = async () => {
       try {
         setAnalyzing(true);
-        const res = await fetch(`/api/reviews/${reviewIdParam}`, {
+        const res = await fetch(`${API_URL}/api/reviews/${reviewIdParam}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -151,7 +153,7 @@ export default function ReviewWorkspace() {
     setLoadingRepos(true);
     try {
       // Simulate repo files payload (same as imported metadata)
-      const res = await fetch('/api/repos/import', {
+      const res = await fetch(`${API_URL}/api/repos/import`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -224,7 +226,7 @@ export default function ReviewWorkspace() {
     setReviewData(null);
 
     try {
-      const res = await fetch('/api/reviews/analyze', {
+      const res = await fetch(`${API_URL}/api/reviews/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -277,7 +279,7 @@ export default function ReviewWorkspace() {
     }, 50);
 
     try {
-      const res = await fetch(`/api/reviews/${reviewData._id}/chat`, {
+      const res = await fetch(`${API_URL}/api/reviews/${reviewData._id}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
